@@ -32,6 +32,7 @@
     28 => 'WendellAdriel\\ValidatedDTO\\Providers\\ValidatedDTOServiceProvider',
     29 => 'App\\Providers\\AppServiceProvider',
     30 => 'App\\Providers\\HelperServiceProvider',
+    31 => 'Vyuldashev\\LaravelOpenApi\\OpenApiServiceProvider',
   ),
   'eager' => 
   array (
@@ -52,6 +53,7 @@
     14 => 'WendellAdriel\\ValidatedDTO\\Providers\\ValidatedDTOServiceProvider',
     15 => 'App\\Providers\\AppServiceProvider',
     16 => 'App\\Providers\\HelperServiceProvider',
+    17 => 'Vyuldashev\\LaravelOpenApi\\OpenApiServiceProvider',
   ),
   'deferred' => 
   array (

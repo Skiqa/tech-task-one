@@ -35,4 +35,7 @@ return [
         ],
     ],
 
+    'api' => [
+        'static_key' => env('API_STATIC_KEY', 'your-hardcoded-key-here'),
+    ],
 ];
