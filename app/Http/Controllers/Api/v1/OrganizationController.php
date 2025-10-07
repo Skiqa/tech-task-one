@@ -43,7 +43,18 @@ class OrganizationController extends AbstractController
     public function listByActivityTree(Activity $activity, OrganizationService $service): JsonResponse
     {
         $organizations = $service->getByActivityTree($activity);
+        return response()->json($organizations, 200);
+    }
 
+    public function nearby(Request $request, OrganizationService $service): JsonResponse
+    {
+        $validated = $request->validate([
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
+            'radius' => 'nullable|numeric|min:0',
+        ]);
+
+        $organizations = $service->getNearby($validated['lat'], $validated['lng'], $validated['radius']);
         return response()->json($organizations, 200);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\DTOs\OrganizationResourceDTO;
-use App\DTOs\BuildingResourceDTO;
-use App\DTOs\ActivityResourceDTO;
+use App\DTOs\Resource\OrganizationResourceDTO;
+use App\DTOs\Resource\BuildingResourceDTO;
+use App\DTOs\Resource\ActivityResourceDTO;
 use App\Models\Organization;
 use App\Models\Activity;
 use App\Models\Building;
@@ -66,5 +66,19 @@ class OrganizationService
             [$activity],
             ...$activity->childrenRecursive->map(fn($child) => $this->flattenActivities($child))
         );
+    }
+
+    public function getNearby(float $lat, float $lng, float $radius)
+    {
+        $haversine = "(6371 * acos(cos(radians(?)) 
+                    * cos(radians(lat)) 
+                    * cos(radians(lng) - radians(?)) 
+                    + sin(radians(?)) 
+                    * sin(radians(lat))))";
+
+        return Organization::with(['activity', 'building'])
+            ->whereHas('building', function ($query) use ($lat, $lng, $radius, $haversine) {
+                $query->whereRaw("$haversine <= ?", [$lat, $lng, $lat, $radius]);
+            })->get();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTOs;
+namespace App\DTOs\Resource;
 
 use WendellAdriel\ValidatedDTO\ResourceDTO;
 use App\Models\Activity;
