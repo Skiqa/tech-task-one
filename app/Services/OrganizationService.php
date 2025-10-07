@@ -6,6 +6,9 @@ use App\DTOs\OrganizationResourceDTO;
 use App\DTOs\BuildingResourceDTO;
 use App\DTOs\ActivityResourceDTO;
 use App\Models\Organization;
+use App\Models\Activity;
+use App\Models\Building;
+use Illuminate\Support\Collection;
 
 class OrganizationService
 {
@@ -15,12 +18,24 @@ class OrganizationService
             ->with(nestedRelations('parent', 3))
             ->get();
 
-        return OrganizationResourceDTO::fromArray([
-            ...$organization->toArray(),
-            'activity' => $activities
-                ->map(fn ($activity) => ActivityResourceDTO::fromModel($activity))
-                ->toArray(),
-            'building' => BuildingResourceDTO::fromModel($organization->building)->toArray(),
-        ]);
+        return OrganizationResourceDTO::fromModel($organization);
+    }
+
+    public function getListOfActivity(Activity $activity): Collection
+    {
+        $organizations = $activity->organizations()
+            ->with('activity', 'building')
+            ->get();
+
+        return $organizations->map(fn($organization) => OrganizationResourceDTO::fromModel($organization));
+    }
+
+    public function getListOfBuilding(Building $building): Collection
+    {
+        $organizations = $building->organizations()
+            ->with('activity', 'building')
+            ->get();
+
+        return $organizations->map(fn($organization) => OrganizationResourceDTO::fromModel($organization));
     }
 }

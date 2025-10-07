@@ -5,6 +5,7 @@ namespace App\DTOs;
 use WendellAdriel\ValidatedDTO\ResourceDTO;
 use App\Models\Activity;
 use App\Models\Building;
+use Illuminate\Database\Eloquent\Model;
 
 class OrganizationResourceDTO extends ResourceDTO
 {
@@ -25,5 +26,21 @@ class OrganizationResourceDTO extends ResourceDTO
     protected function casts(): array
     {
         return [];
+    }
+
+    
+    public static function fromModel(Model $model): static
+    {
+        $activities = $model->activity()
+            ->with(nestedRelations('parent', 3))
+            ->get();
+
+        return OrganizationResourceDTO::fromArray([
+            ...$model->toArray(),
+            'activity' => $activities
+                ->map(fn ($activity) => ActivityResourceDTO::fromModel($activity))
+                ->toArray(),
+            'building' => BuildingResourceDTO::fromModel($model->building)->toArray(),
+        ]);
     }
 }
