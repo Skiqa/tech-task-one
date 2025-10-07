@@ -14,17 +14,20 @@ class OrganizationController extends AbstractController
 {
     public function show(Organization $organization, OrganizationService $service): JsonResponse
     {
-        return response()->json($service->getOne($organization), 200);
+        $organizations = $service->getOne($organization);
+        return response()->json($organizations, 200);
     }
 
     public function listOfActivity(Activity $activity, OrganizationService $service): JsonResponse
     {
-        return response()->json($service->getListOfActivity($activity), 200);
+        $organizations = $service->getListOfActivity($activity);
+        return response()->json($organizations, 200);
     }
     
     public function listOfBuilding(Building $building, OrganizationService $service): JsonResponse
     {
-        return response()->json($service->getListOfBuilding($building), 200);
+        $organizations = $service->getListOfBuilding($building);
+        return response()->json($organizations, 200);
     }
 
     public function search(Request $request, OrganizationService $service): JsonResponse
@@ -33,6 +36,14 @@ class OrganizationController extends AbstractController
             'q' => 'required|string|min:2',
         ]);
 
-        return response()->json($service->searchByName($validated['q']), 200);
+        $organizations = $service->searchByName($validated['q']);
+        return response()->json(organizations, 200);
+    }
+
+    public function listByActivityTree(Activity $activity, OrganizationService $service): JsonResponse
+    {
+        $organizations = $service->getByActivityTree($activity);
+
+        return response()->json($organizations, 200);
     }
 }

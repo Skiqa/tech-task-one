@@ -11,5 +11,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/near', [OrganizationController::class, 'nearBy']);
         Route::get('/{building}/buildings', [V1\OrganizationController::class, 'listOfBuilding']);
         Route::get('/{activity}/activities', [V1\OrganizationController::class, 'listOfActivity']);
+        Route::get('/{activity}/activities/tree', [V1\OrganizationController::class, 'listByActivityTree']);
     });
 });

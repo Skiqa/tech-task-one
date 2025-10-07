@@ -14,12 +14,12 @@ class ActivityResourceDTO extends ResourceDTO
     protected function defaults(): array
     {
         return [
-            'parent' => self::class,
+            'parent' => null,
         ];
     }
 
     protected function casts(): array
     {
-        return [];
-    }
+        return []; 
+   }
 }

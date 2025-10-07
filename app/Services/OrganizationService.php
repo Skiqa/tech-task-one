@@ -48,4 +48,23 @@ class OrganizationService
 
         return $organizations->map(fn($organization) => OrganizationResourceDTO::fromModel($organization));
     }
+
+    public function getByActivityTree(Activity $activity): Collection
+    {
+        $activityIds = collect($this->flattenActivities($activity))->pluck('id');
+        $organizations = Organization::query()
+            ->whereIn('activity_id', $activityIds)
+            ->with(['activity', 'building'])
+            ->get();
+
+        return $organizations->map(fn($organization) => OrganizationResourceDTO::fromModel($organization));
+    }
+
+    private function flattenActivities(Activity $activity): array
+    {
+        return array_merge(
+            [$activity],
+            ...$activity->childrenRecursive->map(fn($child) => $this->flattenActivities($child))
+        );
+    }
 }
