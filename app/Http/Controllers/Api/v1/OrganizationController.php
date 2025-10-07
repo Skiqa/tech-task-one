@@ -26,4 +26,13 @@ class OrganizationController extends AbstractController
     {
         return response()->json($service->getListOfBuilding($building), 200);
     }
+
+    public function search(Request $request, OrganizationService $service): JsonResponse
+    {
+        $validated = $request->validate([
+            'q' => 'required|string|min:2',
+        ]);
+
+        return response()->json($service->searchByName($validated['q']), 200);
+    }
 }

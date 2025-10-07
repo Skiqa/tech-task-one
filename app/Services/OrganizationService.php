@@ -38,4 +38,14 @@ class OrganizationService
 
         return $organizations->map(fn($organization) => OrganizationResourceDTO::fromModel($organization));
     }
+
+    public function searchByName(string $name): Collection
+    {
+        $organizations = Organization::query()
+            ->where('name', 'ILIKE', "%{$name}%")
+            ->with(['activity', 'building'])
+            ->get();
+
+        return $organizations->map(fn($organization) => OrganizationResourceDTO::fromModel($organization));
+    }
 }
